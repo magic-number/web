@@ -1,0 +1,44 @@
+.top-nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px #f0f1f2;
+  padding: 0 16px 8px 16px;
+  font-size: 16px;
+  
+  .left {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    .logo {
+      margin-right: 64px;
+    }
+  }
+
+  .ant-menu-horizontal {
+    border-bottom: 0;
+  }
+
+  .ant-input-affix-wrapper .ant-input {
+    border: 0;
+    &:focus {
+      box-shadow: none;
+    }
+  }
+
+  .ant-menu .ant-menu-light .ant-menu-root .ant-menu-horizontal {
+    border-bottom: 0;
+  }
+  
+  .ant-menu-horizontal > .ant-menu-item, .ant-menu-horizontal > .ant-menu-submenu {
+    border-top: 2px solid transparent;
+    border-bottom: 0;
+  }
+  
+  .ant-menu-horizontal > .ant-menu-item:hover, .ant-menu-horizontal > .ant-menu-submenu:hover, .ant-menu-horizontal > .ant-menu-item-active, .ant-menu-horizontal > .ant-menu-submenu-active, .ant-menu-horizontal > .ant-menu-item-open, .ant-menu-horizontal > .ant-menu-submenu-open, .ant-menu-horizontal > .ant-menu-item-selected, .ant-menu-horizontal > .ant-menu-submenu-selected {
+    border-top: 2px solid #1890ff;
+    border-bottom: 0;
+  }
+}

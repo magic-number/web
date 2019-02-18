@@ -1,0 +1,92 @@
+{
+  "name": "@magic-num/web",
+  "version": "0.0.1",
+  "description": "",
+  "entry": {
+    "index": {
+      "main": "./src/entry/index/index.js",
+      "title": "首页"
+    }
+  },
+  "dependencies": {
+    "prop-types": "^15.6.2",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
+    "react-json-view": "^1.19.1",
+    "react-redux": "^6.0.0",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
+    "redux": "^4.0.1"
+  },
+  "devDependencies": {
+    "antd": "^3.12.4",
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^9.0.0",
+    "babel-loader": "^7.0.0",
+    "babel-plugin-import": "^1.11.0",
+    "babel-plugin-module-resolver": "^3.1.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "css-loader": "^1.0.0",
+    "eslint": "^5.6.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-module-resolver": "^0.8.0",
+    "eslint-plugin-react": "^7.11.1",
+    "html-webpack-plugin": "^3.2.0",
+    "json-loader": "^0.5.7",
+    "less": "^3.8.1",
+    "less-loader": "^4.1.0",
+    "postcss-plugin-px2rem": "^0.8.0",
+    "raw-loader": "^0.5.1",
+    "style-loader": "^0.23.0",
+    "svg-url-loader": "^2.3.2",
+    "uglifyjs-webpack-plugin": "^2.0.1",
+    "url-loader": "^1.1.2",
+    "webpack": "^4.19.1",
+    "webpack-bundle-analyzer": "^3.0.3",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.8"
+  },
+  "scripts": {
+    "start": "tnpm run start:dev",
+    "start:dev": "tnpm run clean;NODE_ENV=development SOURCE_MAP=true webpack-dev-server --hot --inline --content-base  ./dist",
+    "start:mock": "tnpm run clean;NODE_ENV=development MOCK=true SOURCE_MAP=true webpack-dev-server --hot --inline --content-base  ./dist",
+    "start:production": "tnpm run clean;NODE_ENV=production MOCK=false SOURCE_MAP=false webpack-dev-server --hot --inline --content-base  ./dist",
+    "build": "tnpm run build:production",
+    "build:dev": "tnpm run clean;NODE_ENV=development SOURCE_MAP=true MOCK=false ./node_modules/.bin/webpack",
+    "build:mock": "tnpm run clean;NODE_ENV=development SOURCE_MAP=true MOCK=true ./node_modules/.bin/webpack",
+    "build:production": "tnpm run clean;NODE_ENV=production SOURCE_MAP=false MOCK=false ./node_modules/.bin/webpack",
+    "analyze": "tnpm run analyze:production",
+    "analyze:dev": "tnpm run clean; NODE_ENV=development ANALYZE=true ./node_modules/.bin/webpack",
+    "analyze:mock": "tnpm run clean; NODE_ENV=development ANALYZE=true MOCK=true ./node_modules/.bin/webpack",
+    "analyze:production": "tnpm run clean; NODE_ENV=production ANALYZE=true ./node_modules/.bin/webpack",
+    "test": "./node_modules/.bin/jest",
+    "test:dev": "node --inspect-brk ./node_modules/.bin/jest --runInBand",
+    "test:update": "./node_modules/.bin/jest --updateSnapshot",
+    "clean": "rm ./dist/*",
+    "server": "./node_modules/.bin/babel-node ./src/backend/index.js",
+    "server:debug": "./node_modules/.bin/babel-node --inspect-brk ./src/backend/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com:magic-number/web.git"
+  },
+  "keywords": [
+    "magic",
+    "魔数"
+  ],
+  "author": "hao",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/magic-number/web/issues"
+  },
+  "theme": {
+    "hd": "2px",
+    "font-size-base": "16px"
+  },
+  "homepage": "https://github.com/magic-number/web#readme"
+}
