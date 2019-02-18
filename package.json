@@ -1,14 +1,23 @@
 {
   "name": "@magic-num/web",
   "version": "0.0.1",
-  "description": "",
+  "description": "魔数Web界面",
   "entry": {
     "index": {
       "main": "./src/entry/index/index.js",
       "title": "首页"
     }
   },
+  "bin": {
+    "mcw": "./bin/index.js"
+  },
+  "files": [
+    "bin",
+    "dist"
+  ],
   "dependencies": {
+    "commander": "^2.19.0",
+    "finalhandler": "^1.1.1",
     "prop-types": "^15.6.2",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
@@ -16,7 +25,8 @@
     "react-redux": "^6.0.0",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
-    "redux": "^4.0.1"
+    "redux": "^4.0.1",
+    "serve-static": "^1.13.2"
   },
   "devDependencies": {
     "antd": "^3.12.4",
@@ -59,17 +69,12 @@
     "build": "tnpm run build:production",
     "build:dev": "tnpm run clean;NODE_ENV=development SOURCE_MAP=true MOCK=false ./node_modules/.bin/webpack",
     "build:mock": "tnpm run clean;NODE_ENV=development SOURCE_MAP=true MOCK=true ./node_modules/.bin/webpack",
-    "build:production": "tnpm run clean;NODE_ENV=production SOURCE_MAP=false MOCK=false ./node_modules/.bin/webpack",
+    "build:production": "NODE_ENV=production SOURCE_MAP=false MOCK=false ./node_modules/.bin/webpack",
     "analyze": "tnpm run analyze:production",
     "analyze:dev": "tnpm run clean; NODE_ENV=development ANALYZE=true ./node_modules/.bin/webpack",
     "analyze:mock": "tnpm run clean; NODE_ENV=development ANALYZE=true MOCK=true ./node_modules/.bin/webpack",
     "analyze:production": "tnpm run clean; NODE_ENV=production ANALYZE=true ./node_modules/.bin/webpack",
-    "test": "./node_modules/.bin/jest",
-    "test:dev": "node --inspect-brk ./node_modules/.bin/jest --runInBand",
-    "test:update": "./node_modules/.bin/jest --updateSnapshot",
-    "clean": "rm ./dist/*",
-    "server": "./node_modules/.bin/babel-node ./src/backend/index.js",
-    "server:debug": "./node_modules/.bin/babel-node --inspect-brk ./src/backend/index.js"
+    "clean": "rm ./dist/*"
   },
   "repository": {
     "type": "git",

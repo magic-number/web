@@ -87,7 +87,6 @@ const config = {
     }
 }
 
-setAlias(config, 'FETCH', Setting.MOCK === 'true' ? './src/service/mock' : './src/service/rpc')
 setAlias(config, 'UTIL', './src/util')
 
 
