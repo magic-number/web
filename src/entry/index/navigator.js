@@ -14,12 +14,6 @@ class Navigator extends React.PureComponent {
     return <nav className={`${className} top-nav`}>
       <div className="left">
         <Link className="logo" to="/">Magic Number</Link>
-        <div>
-          <Input 
-            placeholder="在Magic中搜索"
-            prefix={<Icon type="search"  />}
-          />
-        </div>
       </div>
       <Menu mode="horizontal">
         {navs.map(nav => {

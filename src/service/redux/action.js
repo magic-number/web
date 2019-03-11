@@ -9,11 +9,11 @@ const ActionMap = {
    * 导航栏
    */
   navs: [
-    { path: '/info', text: '服务状态管理' },
-    { path: '/stat', text: '统计分析数据' },
-    { path: '/api', text: '后端接口管理' },
-    { path: '/tc', text: '测试数据管理' },
-    { path: '/ts', text: '测试集合管理' },
+    { path: '/info', text: '服务状态' },
+    { path: '/api', text: '接口管理' },
+    { path: '/ts', text: '测试场景管理' },
+    { path: '/rule', text: '数据规则管理' },
+    { path: '/tc', text: '测试用例管理' },
     { path: '/coverage', text: '测试数据覆盖率' },
     { path: '/about', text: '关于' },
   ],

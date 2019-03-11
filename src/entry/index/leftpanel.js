@@ -12,14 +12,7 @@ import './leftpanel.less'
 class LeftPanel extends React.PureComponent {
   constructor(props, context, updater) {
     super(props, context, updater)
-    rpc({
-      url: Rpath('api')
-    }).then(res => {
-      const { data = [], success = false } = res
-      if (success) {
-        store.dispatch(ActionMap.apis(data))
-      }
-    })
+
   }
   render() {
     const { apis = [], renderItem = api => api.id } = this.props

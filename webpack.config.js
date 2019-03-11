@@ -71,7 +71,8 @@ const config = {
     },
     plugins: [],
     resolve: {
-        alias: { }
+        alias: {
+        }
     },
     optimization: {
         minimize: Setting.NODE_ENV === 'production',
@@ -88,6 +89,7 @@ const config = {
 }
 
 setAlias(config, 'UTIL', './src/util')
+setAlias(config, 'FETCH', './src/service/rpc')
 
 
 if (Setting.NODE_ENV === 'production' || Setting.NODE_ENV === 'analyze') {

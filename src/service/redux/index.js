@@ -1,6 +1,13 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux'
-import { initialState } from './action'
+import { initialState, ActionMap } from './action'
 import reducer from './reducer'
 import { logger } from './middleware'
 
-export const store = createStore(combineReducers(reducer), initialState, applyMiddleware(logger))
+const store = createStore(combineReducers(reducer), initialState, applyMiddleware(logger))
+
+export default store
+
+export {
+  store,
+  ActionMap
+}
