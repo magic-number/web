@@ -69,3 +69,10 @@ export const timeStringify = (timestamp, accuracy = 6) => {
 }
 
 export const clone = (obj) => JSON.parse(JSON.stringify(obj))
+
+export const batchPromise = (ps, timeout = 5000) => {
+  return Promise.race([
+    Promise.all(ps),
+    new Promise((resolve, reject) => setTimeout(reject, timeout))
+  ])
+}

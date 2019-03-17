@@ -7,8 +7,11 @@ class Creator extends React.PureComponent {
 
   constructor(props, context, updater) {
     super(props, context, updater)
+    const { match } = this.props
+    const { params } = match
     this.state = {
       current: 0,
+      mode: params.id ? 'edit' : 'create'
     }
   }
 
