@@ -21,7 +21,7 @@ class Home extends React.PureComponent {
   renderTable(rows, apis) {
     const { Column } = Table
     const { match } = this.props
-    return <Table dataSource={rows}>
+    return <Table dataSource={rows} rowKey="id">
       <Column
         title="规则备注"
         dataIndex="remark"

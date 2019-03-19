@@ -4,15 +4,13 @@ import Home from './home'
 import { rpc } from 'FETCH'
 import { Rpath } from '../../../common'
 import store, { ActionMap } from '../../../service/redux'
-import { batchPromise } from '../../../util'
 import LoadingHOC from '../../../component/LoadingHOC'
 import './index.less'
 
 export class Manager extends React.PureComponent {
-  constructor(props, context, updater) {
-    super(props, context, updater)
 
-    batchPromise([
+  componentFetchData() {
+    return [
       rpc({
         url: Rpath('apidatarule')
       }).then(res => {
@@ -31,13 +29,13 @@ export class Manager extends React.PureComponent {
         }
         return Promise.reject(res)
       })
-    ]).then(ps => {
-      const { setLoadStatus } = props
-      const [ rules, apis ] = ps
-      store.dispatch(ActionMap.apiDataRules(rules))
-      store.dispatch(ActionMap.apis(apis))
-      return setLoadStatus()
-    })
+    ]
+  }
+
+  componentDidFetch(ps) {
+    const [ rules, apis ] = ps
+    store.dispatch(ActionMap.apiDataRules(rules))
+    store.dispatch(ActionMap.apis(apis))
   }
 
   render() {
@@ -48,4 +46,4 @@ export class Manager extends React.PureComponent {
   }
 }
 
-export default LoadingHOC(withRouter(Manager))
+export default withRouter(LoadingHOC(Manager))

@@ -21,7 +21,8 @@ class Home extends React.PureComponent {
 
   renderTable(rows) {
     const { Column } = Table
-    return <Table dataSource={rows}>
+    const { match } = this.props
+    return <Table dataSource={rows} rowKey="id">
     <Column
         title="用例名称"
         dataIndex="name"
@@ -37,9 +38,17 @@ class Home extends React.PureComponent {
      
       <Column
         title="用例数据"
-        key="operation"
+        key="data"
         render={(text, record) => {
           return <JSONViewer data={record.data} collapsible/>
+        }}
+      />
+
+      <Column
+        title="操作"
+        key="operation"
+        render={(text, record) => {
+          return <Link to={`${match.url}/${record.id}`}>编辑</Link>
         }}
       />
     </Table>

@@ -26,9 +26,9 @@ class Navigator extends React.PureComponent {
           return <Menu.Item key={path} className={active === nav ? 'ant-menu-item-active' : ''}>
               <NavLink to={path} isActive={(match) => {
                 if (match) {
-                  this.setState({
+                  setTimeout(() => this.setState({
                     active: nav,
-                  })
+                  }), 100)
                 }
               }}>{text}</NavLink>
             </Menu.Item>

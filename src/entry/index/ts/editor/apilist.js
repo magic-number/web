@@ -1,28 +1,41 @@
 import React from 'react'
 import { Button, Checkbox, Icon, Table } from 'antd'
-import store from '../../../../service/redux'
+import { connect } from 'react-redux'
+import { rpc } from 'FETCH'
+import { Rpath } from '../../../../common'
+import store, { ActionMap } from '../../../../service/redux'
 import FormHOC from '../../../../component/FormHOC'
+import LoadingHOC from '../../../../component/LoadingHOC'
+
 import { clone } from '../../../../util'
 
 import './apilist.less'
 
 class ApiList extends React.PureComponent {
 
-  constructor(props, context, updater) {
-    super(props, context, updater)
-    const { apis: APIs = [] } = store.getState()
-    const { formData = {} } = props
-    const { apis = [] } = formData
+  componentFetchData() {
+    return rpc({
+      url: Rpath('api')
+    }).then(res => {
+      const { data = [], success = false } = res
+      if (success) {
+        return data
+      }
+      return Promise.reject(res)
+    })
+  }
 
-    const checkMap = {}
+  componentDidFetch(APIs) {
+    store.dispatch(ActionMap.apis(APIs))
+    const { formData = {} } = this.props
+    const { checkMap = {} } = this.state
+    const { apis = [] } = formData
     APIs.forEach(api => {
       checkMap[api.id] = apis.filter(i => i === api.id).length === 1
     })
-
-    this.state = {
-      APIs,
-      checkMap,
-    }
+    this.setState({
+      checkMap
+    })
   }
 
   onSubmit = () => {
@@ -53,13 +66,17 @@ class ApiList extends React.PureComponent {
   }
 
   renderTableList() {
-    const { APIs, checkMap } = this.state
+    const { checkMap = {} } = this.state
+    const { apis: APIs } = this.props
     const { Column } = Table
-    return <Table dataSource={APIs}>
+    return <Table dataSource={APIs} rowKey="id">
       <Column
         title=""
         key="checkbox"
         render={(text, record) => {
+          if (!record) {
+            debugger
+          }
           return <Checkbox key={record.id} checked={checkMap[record.id]} onChange={(event) => {
             const nmap = clone(checkMap)
             nmap[record.id] = event.target.checked
@@ -97,4 +114,7 @@ class ApiList extends React.PureComponent {
   }
 }
 
-export default FormHOC(ApiList)
+export default FormHOC(connect(state => {
+  const { apis } = state
+  return { apis }
+})(LoadingHOC(ApiList)))
