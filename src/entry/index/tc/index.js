@@ -1,7 +1,6 @@
 import React from 'react'
 import { Route, Switch, Link, withRouter } from 'react-router-dom'
 import Table from 'antd/lib/table'
-import LeftPanel from '../leftpanel'
 import Manager from './manager'
 import 'antd/lib/card/style/index.less'
 import 'antd/lib/table/style/index.less'
@@ -47,7 +46,6 @@ const _TestcaseHome = withRouter(TestcaseHome)
 export default function Testcase ({ match }) {
   const renderItem = api => <Link to={`${match.url}/${api.id}`}>{api.id}</Link>
   return <section className="api-manager">
-          <LeftPanel renderItem={renderItem}/>
           <Switch>
             <Route exact path={match.url} component={_TestcaseHome} />
             <Route exact path={`${match.url}/:api`} component={Manager} />

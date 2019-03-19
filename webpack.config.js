@@ -59,10 +59,6 @@ const config = {
                     presets: ['react', 'es2015', 'stage-0'],
                 }
             },
-            {
-                test: /\.json$/,
-                loader: 'json-loader'
-            },
     　　　　{
     　　　　　　test: /\.(png|jpg)$/,
     　　　　　　loader: 'url-loader?limit=8192'
