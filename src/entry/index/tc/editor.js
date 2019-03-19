@@ -1,8 +1,8 @@
 import React from 'react'
-import { Form, Input, Button } from 'antd'
-import FormHOC from '../../../../component/FormHOC'
+import { Form } from 'antd'
+import FormHOC from '../../../component/FormHOC'
 
-class Base extends React.PureComponent {
+class Editor extends React.PureComponent {
 
   onSubmit = (event) => {
     const { collectData, onData } = this.props
@@ -45,4 +45,4 @@ class Base extends React.PureComponent {
   }
 }
 
-export default FormHOC(Base)
+export default FormHOC(Editor)

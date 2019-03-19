@@ -50,11 +50,10 @@ export class Manager extends React.PureComponent {
               const { params } = match
               const { id } = params
               const { testsuites } = store.getState()
-              const ts = testsuites.filter(t => t.id === id)
-              if (ts && ts.length === 1) {
-                return <Editor formData={ts[0]} />
+              const [ ts, ...rest ] = testsuites.filter(t => t.id === id)
+              if (ts && rest.length === 0) {
+                return <Editor formData={ts} />
               }
-              return null
             }} />
         </Switch>
   }

@@ -1,16 +1,9 @@
 import React from 'react'
-import Form from 'antd/lib/form'
-import Icon from 'antd/lib/icon'
-
-import Checkbox from 'antd/lib/checkbox'
-import Button from 'antd/lib/button'
-import Table from 'antd/lib/table'
-import 'antd/lib/table/style/index.less'
-import 'antd/lib/form/style/index.less'
-import 'antd/lib/icon/style/index.less'
-import 'antd/lib/button/style/index.less'
+import { Button, Checkbox, Icon, Table } from 'antd'
 import store from '../../../../service/redux'
+import FormHOC from '../../../../component/FormHOC'
 import { clone } from '../../../../util'
+
 import './apilist.less'
 
 class ApiList extends React.PureComponent {
@@ -104,4 +97,4 @@ class ApiList extends React.PureComponent {
   }
 }
 
-export default ApiList
+export default FormHOC(ApiList)

@@ -1,21 +1,10 @@
 import React from 'react'
-import Form from 'antd/lib/form'
-import Checkbox from 'antd/lib/checkbox'
-import Button from 'antd/lib/button'
-import Input from 'antd/lib/input'
+import { Button, Checkbox, Form, Input, Timeline } from 'antd'
 import { connect } from 'react-redux'
-import Timeline from 'antd/lib/timeline'
-import 'antd/lib/form/style/index.less'
-import 'antd/lib/checkbox/style/index.less'
-import 'antd/lib/button/style/index.less'
-import 'antd/lib/input/style/index.less'
 import { rpc } from 'FETCH'
 import { Rpath } from '../../../../common'
-
 import store, { ActionMap } from '../../../../service/redux'
 import LoadingHOC from '../../../../component/LoadingHOC'
-
-import { clone } from '../../../../util'
 import './rulelist.less'
 
 class RuleList extends React.PureComponent {

@@ -6,6 +6,10 @@ const ActionMap = {
    */
   apis: [],
   /**
+   * 测试用例
+   */
+  testcases: [],
+  /**
    * 导航栏
    */
   navs: [

@@ -1,18 +1,14 @@
 import React from 'react'
-import Steps from 'antd/lib/steps'
+import { Steps } from 'antd'
 import { rpc } from 'FETCH'
 import { Rpath } from '../../../../common'
-import FormHOC from '../../../../component/FormHOC'
+import { clone } from '../../../../util'
 import Base from './base'
 import ApiList from './apilist'
-import 'antd/lib/steps/style/index.less'
+import RuleList from './rulelist'
 import './index.less'
-import { clone } from '../../../../util'
-import RuleList from './rulelist';
 
 const { Step } = Steps
-const BaseSection = FormHOC(Base)
-const ApiSection = FormHOC(ApiList)
 
 class Editor extends React.PureComponent {
 
@@ -40,9 +36,9 @@ class Editor extends React.PureComponent {
     const { testsuite } = this.state
     switch(current) {
       case 0:
-        return <BaseSection onData={this.baseData} formData={testsuite}/>
+        return <Base onData={this.baseData} formData={testsuite}/>
       case 1:
-        return <ApiSection onData={this.apiData} formData={testsuite} onPre={() => this.setState({ current: 0 })} />
+        return <ApiList onData={this.apiData} formData={testsuite} onPre={() => this.setState({ current: 0 })} />
       case 2:
         return <RuleList onData={this.ruleData} formData={testsuite} onPre={() => this.setState({ current: 1 })} />
       default:

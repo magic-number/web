@@ -1,54 +1,49 @@
 import React from 'react'
-import { Route, Switch, Link, withRouter } from 'react-router-dom'
-import Table from 'antd/lib/table'
-import Manager from './manager'
-import 'antd/lib/card/style/index.less'
-import 'antd/lib/table/style/index.less'
-import 'antd/lib/pagination/style/index.less'
-
+import { Route, Switch, withRouter } from 'react-router-dom'
+import Home from './home'
+import Editor from './home'
+import { rpc } from 'FETCH'
+import { Rpath } from '../../../common'
+import store, { ActionMap } from '../../../service/redux'
+import LoadingHOC from '../../../component/LoadingHOC'
 import './index.less'
 
-class TestcaseHome extends React.PureComponent {
-  render() {
-    // const { match } = this.props
-    const columns = [
-      {
-        title: '接口名称',
-        dataIndex: 'name',
-        key: 'name',
-      },
-      {
-        title: '用例数量',
-        dataIndex: 'count',
-        key: 'count',
-        render: val => <span style={{ color: val > 0 ? '#000' : 'red' }}>{val}</span>
-      },
-      {
-        title: '操作',
-        key: 'action',
-        render: (text, record) => {
-          return <span>添加测试用例</span>
-        }
+export class Manager extends React.PureComponent {
+  constructor(props, context, updater) {
+    super(props, context, updater)
+
+    rpc({
+      url: Rpath('testcase')
+    }).then(res => {
+      const { data = [], success = false } = res
+      if (success) {
+        return data
       }
-    ]
-    const data = [
-      { name: 'pageInfo', count: 0 },
-      { name: 'someAPI', count: 10 },
-    ]
-    return <section className="api-manager-home">
-      <Table columns={columns} dataSource={data}/>
-    </section>
+      return Promise.reject(res)
+    }).then(tcs => {
+      const { setLoadStatus } = props
+      store.dispatch(ActionMap.testcases(tcs))
+      return setLoadStatus()
+    })
+
+  }
+
+  render() {
+    const { match } = this.props;
+    return <Switch className="testcase-manager">
+            <Route exact path={`${match.url}`} component={Home} />
+            <Route exact path={`${match.url}/creator`} component={Editor} />
+            <Route path={`${match.url}/:id`} component={({ match }) => {
+              const { params } = match
+              const { id } = params
+              const { testcases } = store.getState()
+              const [ ts, ...rest ] = testcases.filter(t => t.id === id)
+              if (ts && rest.length === 0) {
+                return <Editor formData={ts} />
+              }
+            }} />
+        </Switch>
   }
 }
 
-const _TestcaseHome = withRouter(TestcaseHome)
-
-export default function Testcase ({ match }) {
-  const renderItem = api => <Link to={`${match.url}/${api.id}`}>{api.id}</Link>
-  return <section className="api-manager">
-          <Switch>
-            <Route exact path={match.url} component={_TestcaseHome} />
-            <Route exact path={`${match.url}/:api`} component={Manager} />
-          </Switch>
-        </section>
-}
+export default LoadingHOC(withRouter(Manager))
