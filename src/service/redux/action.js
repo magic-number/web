@@ -21,6 +21,11 @@ const ActionMap = {
    * 所有的testsuite
    */
   testsuites: [],
+
+  /**
+   * 数据切换规则
+   */
+  apiDataRules: [],
   /**
    * 当前选中的testsuite
    */

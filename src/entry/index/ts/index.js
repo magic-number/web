@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch, withRouter } from 'react-router-dom'
 import Editor from './editor'
 import Home from './home'
 import { rpc } from 'FETCH'
@@ -44,9 +44,9 @@ export class Manager extends React.PureComponent {
   render() {
     const { match } = this.props;
     return <Switch className="testsuite-manager">
-            <Route exact path={match.url} component={Home} />
+            <Route exact path={`${match.url}`} component={Home} />
             <Route exact path={`${match.url}/creator`} component={Editor} />
-            <Route exact path={`${match.url}/:id`} component={({ match }) => {
+            <Route path={`${match.url}/:id`} component={({ match }) => {
               const { params } = match
               const { id } = params
               const { testsuites } = store.getState()
@@ -60,4 +60,4 @@ export class Manager extends React.PureComponent {
   }
 }
 
-export default LoadingHOC(Manager)
+export default LoadingHOC(withRouter(Manager))

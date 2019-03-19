@@ -8,6 +8,7 @@ import ApiList from './apilist'
 import 'antd/lib/steps/style/index.less'
 import './index.less'
 import { clone } from '../../../../util'
+import RuleList from './rulelist';
 
 const { Step } = Steps
 const BaseSection = FormHOC(Base)
@@ -43,7 +44,7 @@ class Editor extends React.PureComponent {
       case 1:
         return <ApiSection onData={this.apiData} formData={testsuite} onPre={() => this.setState({ current: 0 })} />
       case 2:
-        return <div>API Data Rule</div>
+        return <RuleList onData={this.ruleData} formData={testsuite} onPre={() => this.setState({ current: 1 })} />
       default:
         throw new Error(`illegal step index ${current}`)
     }
@@ -88,6 +89,23 @@ class Editor extends React.PureComponent {
         current: 2,
         testsuite: data,
       })
+    })
+  }
+
+  /**
+   * 更新测试场景的rule数据
+   */
+  ruleData = data => {
+    const { testsuite } = this.state
+    const nts = clone(testsuite)
+    nts.apiDataRules = data
+    rpc({
+      url: Rpath('testsuites'),
+      method: 'POST',
+      data: nts,
+    }).then(res => {
+      const { data } = res
+      console.log(res);
     })
   }
   

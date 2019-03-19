@@ -21,6 +21,7 @@ class Home extends React.PureComponent {
 
   renderTable(rows, apis) {
     const { Column } = Table
+    const { match } = this.props
     return <Table dataSource={rows}>
       <Column
         title="场景名称"
@@ -46,7 +47,7 @@ class Home extends React.PureComponent {
         title="操作"
         key="operation"
         render={(text, record) => {
-          return <div>编辑|删除</div>
+          return <Link to={`${match.url}/${record.id}`}>编辑</Link>
         }}
       />
     </Table>

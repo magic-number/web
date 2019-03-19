@@ -5,7 +5,7 @@ const FormHOC = WrapperredComponent => {
   class FormHOCComponent extends React.PureComponent {
 
     getInitialValue = k => {
-      const { formData } = this.props
+      const { formData = {} } = this.props
       return formData[k]
     }
 
