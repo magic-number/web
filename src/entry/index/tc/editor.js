@@ -1,18 +1,38 @@
 import React from 'react'
-import { Form, Input, Button } from 'antd'
+import { Form, Input, Button, message } from 'antd'
+import { withRouter } from 'react-router-dom'
+import { rpc } from 'FETCH'
+import { Rpath } from '../../../common'
 import FormHOC from '../../../component/FormHOC'
+import store, { ActionMap } from '../../../service/redux'
+import './editor.less'
 
 class Editor extends React.PureComponent {
 
   onSubmit = (event) => {
-    const { collectData, onData } = this.props
-    collectData(event).then((vals) => onData(vals))
+    const { collectData, history } = this.props
+    collectData(event).then((vals) => {
+      vals.data = JSON.parse(vals.data)
+      rpc({
+        url: Rpath('testcase'),
+        method: 'POST',
+        data: vals,
+      }).then(res => {
+        message.success("创建成功")
+        const { testcases = [] } = store.getState()
+        const { data } = res
+        store.dispatch(ActionMap.testcases(testcases.concat(data)))
+        history.goBack()
+      }, res => {
+        return message.error(`创建失败!${JSON.stringify(res)}`).then(() => Promise.reject(res))
+      })
+    })
   }
 
   render() {
-    const { form, getInitialValue } = this.props
+    const { form, getInitialValue, history } = this.props
     const { getFieldDecorator } = form
-    return <Form className="testsuite-editor-base" onSubmit={this.onSubmit}>
+    return <Form className="tc-editor" onSubmit={this.onSubmit}>
         {getFieldDecorator('id', {
             initialValue: getInitialValue('id'),
           })(
@@ -47,12 +67,12 @@ class Editor extends React.PureComponent {
           {getFieldDecorator('data', {
             initialValue: JSON.stringify(getInitialValue('data')),
           })(
-            <Input.TextArea rows={4} placeholder="JSON数据" />
+            <Input.TextArea rows={8} placeholder="JSON数据" className="json"/>
           )}
         </Form.Item>
-        <footer><Button type="primary" onClick={this.onSubmit}>完成</Button></footer>
+        <footer><Button.Group><Button onClick={() => history.goBack()}>返回</Button><Button type="primary" onClick={this.onSubmit}>完成</Button></Button.Group></footer>
     </Form>
   }
 }
 
-export default FormHOC(Editor)
+export default withRouter(FormHOC(Editor))

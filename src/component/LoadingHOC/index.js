@@ -1,7 +1,8 @@
 import React from 'react'
+import { Skeleton } from 'antd'
 
 const renderLoading = () => {
-  return <div>Loading</div>
+  return <Skeleton active />
 }
 
 const renderFail = () => {

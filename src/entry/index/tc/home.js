@@ -4,13 +4,13 @@ import { connect } from 'react-redux'
 import { Table } from 'antd'
 import { JSONViewer } from 'react-json-editor-viewer'
 import Summary from '../../../component/summary'
-
+import './home.less'
 
 class Home extends React.PureComponent {
 
   render() {
     const { match, testcases = [] } = this.props
-    return <section className="rule-manager-home">
+    return <section className="home">
       <header>
         <Link to={`${match.url}/creator`}><Summary title="+" value="创建测试用例" className="primary"/></Link>
         <Summary title="测试用例" value={testcases.length}/>
