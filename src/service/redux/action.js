@@ -1,4 +1,4 @@
-import { clone } from '../../util'
+import { clone } from '../../util';
 
 const ActionMap = {
   /**
@@ -34,23 +34,21 @@ const ActionMap = {
    * 当前选中的testsuite
    */
   currentTestSuite: null,
-}
+};
 
-const createAction = (type) => {
-  return (data) => {
-    return {
-      type,
-      payload: data,
-    }
-  }
-}
+const createAction = type => data => ({
+  type,
+  payload: data,
+});
 
-const initialState = clone(ActionMap)
+const initialState = clone(ActionMap);
 
-Object.keys(initialState).forEach(k => ActionMap[k] = createAction(k))
+Object.keys(initialState).forEach((k) => {
+  ActionMap[k] = createAction(k);
+});
 
 export {
   ActionMap,
   initialState,
-  createAction
-}
+  createAction,
+};

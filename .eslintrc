@@ -2,8 +2,18 @@
   "extends": [
     "eslint-config-airbnb"
   ],
+  "parser": "babel-eslint",
   "globals": {
+    "location": "readonly",
+    "window": "readonly",
+    "document": "readonly"
   },
   "rules": {
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "import/no-unresolved": "off",
+    "react/prop-types": "off",
+    "no-restricted-globals": "off",
+    "class-methods-use-this":  ["error", { "exceptMethods": ["componentFetchData", "componentDidFetch"] }],
+    "no-param-reassign": "warn"
   }
 }

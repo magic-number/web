@@ -1,24 +1,21 @@
-import { ActionMap } from './action'
+import { ActionMap } from './action';
 
-const reducers = {}
+const reducers = {};
 
-const createReducer = (type, val = null) => {
-  return (state, action) => {
-    if (action.type === type) {
-      if (state !== action.payload) {
-        return action.payload
-      } else {
-        return state
-      }
+const createReducer = (type, val = null) => (state, action) => {
+  if (action.type === type) {
+    if (state !== action.payload) {
+      return action.payload;
     }
-    if (state !== undefined && state !== val) return state
-    return val
+    return state;
   }
-}
+  if (state !== undefined && state !== val) return state;
+  return val;
+};
 
-Object.keys(ActionMap).forEach(k => {
-  reducers[k] = createReducer(k)
-})
+Object.keys(ActionMap).forEach((k) => {
+  reducers[k] = createReducer(k);
+});
 
 
-export default reducers
+export default reducers;

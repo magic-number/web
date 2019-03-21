@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Form, Input, Button, message,
+  Form, Input, Button, message, Select,
 } from 'antd';
 import { withRouter } from 'react-router-dom';
 import { rpc } from 'FETCH';
@@ -10,51 +10,65 @@ import store, { ActionMap } from '../../../service/redux';
 import './editor.less';
 
 class Editor extends React.PureComponent {
+  constructor(props, context, updater) {
+    super(props, context, updater);
+    this.state = {
+      type: 'rpc',
+    };
+  }
+
   onSubmit = (event) => {
     const { collectData, history } = this.props;
+    /**
+     * todo: api本地查重校验
+     */
     collectData(event).then((vals) => {
-      vals.data = JSON.parse(vals.data);
+      // rpc不需要method信息
+      if (vals.type === 'rpc') {
+        vals.method = '';
+      }
       rpc({
-        url: Rpath('testcase'),
+        url: Rpath('api'),
         method: 'POST',
         data: vals,
       }).then((res) => {
         const { data } = res;
         const createFlag = !vals.id && data.id;
         message.success(`${createFlag ? '创建' : '更新'}成功`);
-        const { testcases: rows = [] } = store.getState();
+        const { apis: rows = [] } = store.getState();
         if (createFlag) {
-          store.dispatch(ActionMap.testcases(rows.concat(data)));
+          store.dispatch(ActionMap.apis(rows.concat(data)));
         } else {
           const idx = rows.findIndex(i => i.id === data.id);
           rows[idx] = data;
-          store.dispatch(ActionMap.testcases(rows.slice(0)));
+          store.dispatch(ActionMap.apis(rows.slice(0)));
         }
         history.goBack();
-      }, res => message.error(`创建失败!${JSON.stringify(res)}`).then(() => Promise.reject(res)));
+      }, res => message.error(`操作失败!${JSON.stringify(res)}`).then(() => Promise.reject(res)));
     });
   }
 
   render() {
     const { form, getInitialValue, history } = this.props;
+    const { type } = this.state;
     const { getFieldDecorator } = form;
     return (
-      <Form className="tc-editor" onSubmit={this.onSubmit}>
+      <Form className="api-editor" onSubmit={this.onSubmit}>
         {getFieldDecorator('id', {
           initialValue: getInitialValue('id'),
         })(
           <Input type="hidden" />,
         )}
         <Form.Item
-          label="用例名称"
+          label="接口URI"
         >
-          {getFieldDecorator('name', {
-            initialValue: getInitialValue('name'),
+          {getFieldDecorator('uri', {
+            initialValue: getInitialValue('uri'),
             rules: [{
-              required: true, message: '用例必须有一个名称',
+              required: true, message: '必须包含URI',
             }],
           })(
-            <Input placeholder="测试用例名称" />,
+            <Input placeholder="请输入接口的URI" />,
           )}
         </Form.Item>
 
@@ -69,12 +83,28 @@ class Editor extends React.PureComponent {
         </Form.Item>
 
         <Form.Item
-          label="用例数据"
+          label="用例类型"
         >
-          {getFieldDecorator('data', {
-            initialValue: JSON.stringify(getInitialValue('data')),
+          {getFieldDecorator('type', {
+            initialValue: getInitialValue('type'),
           })(
-            <Input.TextArea rows={8} placeholder="JSON数据" className="json" />,
+            <Select onChange={val => this.setState({ type: val })}>
+              <Select.Option value="rpc">RPC</Select.Option>
+              <Select.Option value="http">Http</Select.Option>
+            </Select>,
+          )}
+        </Form.Item>
+
+        <Form.Item
+          label="请求方法"
+        >
+          {getFieldDecorator('method', {
+            initialValue: getInitialValue('method') || 'GET',
+          })(
+            <Select disabled={type !== 'http'}>
+              <Select.Option value="get">GET</Select.Option>
+              <Select.Option value="post">POST</Select.Option>
+            </Select>,
           )}
         </Form.Item>
         <footer>

@@ -1,35 +1,40 @@
-import React from 'react'
-import Form from 'antd/lib/form'
+import React from 'react';
+import Form from 'antd/lib/form';
 
-const FormHOC = WrapperredComponent => {
+const FormHOC = (WrapperredComponent) => {
   class FormHOCComponent extends React.PureComponent {
-
-    getInitialValue = k => {
-      const { formData = {} } = this.props
-      return formData[k]
+    getInitialValue = (k) => {
+      const { formData = {} } = this.props;
+      return formData[k];
     }
 
-    collectData = event => {
-      event.preventDefault()
+    collectData = (event) => {
+      event.preventDefault();
       return new Promise((resolve, reject) => {
-        const { form } = this.props
+        const { form } = this.props;
         form.validateFieldsAndScroll((err, values) => {
           if (err) {
-            console.log('Received values of form: ', values)
-            reject(values)   
+            console.log('Received values of form: ', values);
+            reject(values);
           } else {
-            resolve(values)
+            resolve(values);
           }
-        })
-      })
+        });
+      });
     }
 
     render() {
-      return <WrapperredComponent {...this.props} getInitialValue={this.getInitialValue} collectData={this.collectData}/>
+      return (
+        <WrapperredComponent
+          {...this.props}
+          getInitialValue={this.getInitialValue}
+          collectData={this.collectData}
+        />
+      );
     }
   }
 
-  return Form.create({})(FormHOCComponent)
-}
+  return Form.create({})(FormHOCComponent);
+};
 
-export default FormHOC
+export default FormHOC;

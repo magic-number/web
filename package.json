@@ -16,6 +16,7 @@
     "dist"
   ],
   "dependencies": {
+    "antd": "^3.12.4",
     "commander": "^2.19.0",
     "finalhandler": "^1.1.1",
     "prop-types": "^15.6.2",
@@ -30,7 +31,6 @@
     "serve-static": "^1.13.2"
   },
   "devDependencies": {
-    "antd": "^3.12.4",
     "babel-cli": "^6.26.0",
     "babel-eslint": "^9.0.0",
     "babel-loader": "^7.0.0",
@@ -45,6 +45,7 @@
     "eslint": "^5.6.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-module-resolver": "^0.8.0",
     "eslint-plugin-react": "^7.11.1",
     "html-webpack-plugin": "^3.2.0",
@@ -71,6 +72,8 @@
     "build:dev": "tnpm run clean;NODE_ENV=development SOURCE_MAP=true MOCK=false ./node_modules/.bin/webpack",
     "build:mock": "tnpm run clean;NODE_ENV=development SOURCE_MAP=true MOCK=true ./node_modules/.bin/webpack",
     "build:production": "NODE_ENV=production SOURCE_MAP=false MOCK=false ./node_modules/.bin/webpack",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
     "analyze": "tnpm run analyze:production",
     "analyze:dev": "tnpm run clean; NODE_ENV=development ANALYZE=true ./node_modules/.bin/webpack",
     "analyze:mock": "tnpm run clean; NODE_ENV=development ANALYZE=true MOCK=true ./node_modules/.bin/webpack",
