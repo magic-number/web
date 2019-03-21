@@ -40,7 +40,7 @@ export class Manager extends React.PureComponent {
   render() {
     const { match } = this.props;
     return (
-      <Switch className="testsuite-manager">
+      <Switch>
         <Route exact path={`${match.url}`} component={Home} />
         <Route exact path={`${match.url}/creator`} component={Editor} />
       </Switch>

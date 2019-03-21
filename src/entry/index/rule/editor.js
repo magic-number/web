@@ -88,12 +88,12 @@ class Editor extends React.PureComponent {
         }
         </Form.Item>
         <Form.Item
-          label="用例备注"
+          label="规则备注"
         >
           {getFieldDecorator('remark', {
             initialValue: getInitialValue('remark'),
           })(
-            <Input.TextArea placeholder="用例备注信息" rows={4} />,
+            <Input.TextArea placeholder="规则备注信息" rows={4} />,
           )}
         </Form.Item>
 
@@ -143,7 +143,7 @@ class Editor extends React.PureComponent {
               case 'testcase':
               {
                 const { testcases = [] } = this.props;
-                const ds = testcases.map(i => ({ value: i.id, text: `${i.name}` }));
+                const ds = testcases.map(i => ({ value: i.id, text: `${i.name} | ${i.remark}` }));
                 return (
                   <AutoComplete
                     dataSource={ds}

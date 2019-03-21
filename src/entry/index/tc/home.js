@@ -34,7 +34,7 @@ class Home extends React.PureComponent {
         <Column
           title="操作"
           key="operation"
-          render={(text, record) => <Link to={`${match.url}/${record.id}`}>编辑</Link>}
+          render={(text, record) => <Link className="operation-edit" to={`${match.url}/${record.id}`}>编辑</Link>}
         />
       </Table>
     );
