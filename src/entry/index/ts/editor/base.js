@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, Input, Button } from 'antd';
+import { withRouter } from 'react-router-dom';
 import FormHOC from '../../../../component/FormHOC';
 
 class Base extends React.PureComponent {
@@ -9,10 +10,10 @@ class Base extends React.PureComponent {
   }
 
   render() {
-    const { form, getInitialValue } = this.props;
+    const { form, getInitialValue, history } = this.props;
     const { getFieldDecorator } = form;
     return (
-      <Form className="testsuite-editor-base" onSubmit={this.onSubmit}>
+      <Form className="base" onSubmit={this.onSubmit}>
         {getFieldDecorator('id', {
           initialValue: getInitialValue('id'),
         })(
@@ -40,10 +41,15 @@ class Base extends React.PureComponent {
             <Input.TextArea placeholder="场景备注信息" rows={4} />,
           )}
         </Form.Item>
-        <footer><Button type="primary" onClick={this.onSubmit}>下一步</Button></footer>
+        <footer>
+          <Button.Group>
+            <Button onClick={() => history.goBack()}>返回</Button>
+            <Button type="primary" onClick={this.onSubmit}>下一步</Button>
+          </Button.Group>
+        </footer>
       </Form>
     );
   }
 }
 
-export default FormHOC(Base);
+export default withRouter(FormHOC(Base));

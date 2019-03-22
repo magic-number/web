@@ -15,9 +15,9 @@ const ActionMap = {
   navs: [
     { path: '/info', text: '服务状态' },
     { path: '/api', text: '接口管理' },
-    { path: '/ts', text: '测试场景管理' },
-    { path: '/rule', text: '数据规则管理' },
     { path: '/tc', text: '测试用例管理' },
+    { path: '/rule', text: '数据规则管理' },
+    { path: '/ts', text: '测试场景管理' },
     { path: '/coverage', text: '测试数据覆盖率' },
     { path: '/about', text: '关于' },
   ],

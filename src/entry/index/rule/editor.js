@@ -7,15 +7,16 @@ import { connect } from 'react-redux';
 import { rpc } from 'FETCH';
 import { Rpath } from '../../../common';
 import FormHOC from '../../../component/FormHOC';
-import LoadingHOC from '../../../component/LoadingHOC';
 import store, { ActionMap } from '../../../service/redux';
 import './editor.less';
 
 class Editor extends React.PureComponent {
   constructor(props, context, updater) {
     super(props, context, updater);
+    const { formData = {} } = props;
+    const { mode = 'testcase' } = formData;
     this.state = {
-      mode: 'testcase',
+      mode,
     };
   }
 
@@ -40,22 +41,6 @@ class Editor extends React.PureComponent {
         history.goBack();
       }, res => message.error(`操作失败!${JSON.stringify(res)}`).then(() => Promise.reject(res)));
     });
-  }
-
-  componentFetchData() {
-    return rpc({
-      url: Rpath('testcase'),
-    }).then((res) => {
-      const { data = [], success = false } = res;
-      if (success) {
-        return data;
-      }
-      return Promise.reject(res);
-    });
-  }
-
-  componentDidFetch(data) {
-    store.dispatch(ActionMap.testcases(data));
   }
 
   render() {
@@ -152,6 +137,7 @@ class Editor extends React.PureComponent {
                 );
               }
               case 'json':
+              case 'func':
               default:
                 return <Input.TextArea rows={8} placeholder="JSON数据" className="json" />;
             }
@@ -172,4 +158,4 @@ class Editor extends React.PureComponent {
 export default withRouter(connect((state) => {
   const { apis, testcases, apiDataRules } = state;
   return { apis, testcases, apiDataRules };
-})(FormHOC(LoadingHOC(Editor))));
+})(FormHOC(Editor)));

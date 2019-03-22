@@ -28,13 +28,23 @@ export class Manager extends React.PureComponent {
         }
         return Promise.reject(res);
       }),
+      rpc({
+        url: Rpath('testcase'),
+      }).then((res) => {
+        const { data = [], success = false } = res;
+        if (success) {
+          return data;
+        }
+        return Promise.reject(res);
+      }),
     ];
   }
 
   componentDidFetch(ps) {
-    const [rules, apis] = ps;
+    const [rules, apis, testcases] = ps;
     store.dispatch(ActionMap.apiDataRules(rules));
     store.dispatch(ActionMap.apis(apis));
+    store.dispatch(ActionMap.testcases(testcases));
   }
 
   render() {
@@ -43,6 +53,19 @@ export class Manager extends React.PureComponent {
       <Switch>
         <Route exact path={`${match.url}`} component={Home} />
         <Route exact path={`${match.url}/creator`} component={Editor} />
+        <Route
+          path={`${match.url}/:id`}
+          component={({ match: _match }) => {
+            const { params } = _match;
+            const { id } = params;
+            const { apiDataRules: rows } = store.getState();
+            const [item, ...rest] = rows.filter(t => t.id === id);
+            if (item && rest.length === 0) {
+              return <Editor formData={item} />;
+            }
+            return null;
+          }}
+        />
       </Switch>
     );
   }

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Steps } from 'antd';
+import { message, Steps } from 'antd';
+import { withRouter } from 'react-router-dom';
 import { rpc } from 'FETCH';
 import { Rpath } from '../../../../common';
 import { clone } from '../../../../util';
@@ -72,8 +73,10 @@ class Editor extends React.PureComponent {
       url: Rpath('testsuites'),
       method: 'POST',
       data: nts,
-    }).then((res) => {
-      console.log(res);
+    }).then(() => {
+      const { history } = this.props;
+      message.success('操作成功！');
+      history.goBack();
     });
   }
 
@@ -106,7 +109,7 @@ class Editor extends React.PureComponent {
   render() {
     const { current } = this.state;
     return (
-      <section className="testsuite-creator">
+      <section className="ts-editor">
         <Steps current={current} className="progress">
           <Step title="场景基本信息" />
           <Step title="选择包含的API" description="选择场景涉及的API" />
@@ -118,4 +121,4 @@ class Editor extends React.PureComponent {
   }
 }
 
-export default Editor;
+export default withRouter(Editor);

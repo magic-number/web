@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Button, Checkbox, Icon, Table,
+  Button, Icon, Table,
 } from 'antd';
 import { connect } from 'react-redux';
 import { rpc } from 'FETCH';
@@ -8,13 +8,16 @@ import { Rpath } from '../../../../common';
 import store, { ActionMap } from '../../../../service/redux';
 import FormHOC from '../../../../component/FormHOC';
 import LoadingHOC from '../../../../component/LoadingHOC';
-
-import { clone } from '../../../../util';
-
 import './apilist.less';
 
 class ApiList extends React.PureComponent {
-  static componentFetchData() {
+  onSubmit = () => {
+    const { selections } = this.state;
+    const { onData } = this.props;
+    onData(selections);
+  }
+
+  componentFetchData() {
     return rpc({
       url: Rpath('api'),
     }).then((res) => {
@@ -26,59 +29,32 @@ class ApiList extends React.PureComponent {
     });
   }
 
-  onSubmit = () => {
-    const { checkMap = {} } = this.state;
-    const { onData } = this.props;
-    const ret = [];
-    Object.keys(checkMap).forEach((k) => {
-      if (checkMap[k]) {
-        ret.push(k);
-      }
-    });
-    onData(ret);
-  }
-
   componentDidFetch(APIs) {
     store.dispatch(ActionMap.apis(APIs));
     const { formData = {} } = this.props;
-    const { checkMap = {} } = this.state;
     const { apis = [] } = formData;
-    APIs.forEach((api) => {
-      checkMap[api.id] = apis.filter(i => i === api.id).length === 1;
-    });
     this.setState({
-      checkMap,
+      selections: apis,
     });
   }
 
   renderTableList() {
-    const { checkMap = {} } = this.state;
+    const { selections = [] } = this.state;
     const { apis: APIs } = this.props;
     const { Column } = Table;
     return (
-      <Table dataSource={APIs} rowKey="id">
-        <Column
-          title=""
-          key="checkbox"
-          render={(text, record) => {
-            if (!record) {
-              return null;
-            }
-            return (
-              <Checkbox
-                key={record.id}
-                checked={checkMap[record.id]}
-                onChange={(event) => {
-                  const nmap = clone(checkMap);
-                  nmap[record.id] = event.target.checked;
-                  this.setState({
-                    checkMap: nmap,
-                  });
-                }}
-              />
-            );
-          }}
-        />
+      <Table
+        dataSource={APIs}
+        rowKey="id"
+        rowSelection={{
+          selectedRowKeys: selections,
+          onChange: (selectedRowKeys) => {
+            this.setState({
+              selections: selectedRowKeys,
+            });
+          },
+        }}
+      >
         <Column
           title="URI"
           dataIndex="uri"
@@ -99,9 +75,9 @@ class ApiList extends React.PureComponent {
         />
         <Column
           title="方法"
-          dataIndex="method"
           key="method"
           sorter={(a, b) => a.method > b.method}
+          render={(text, record) => (record.method || '--')}
         />
       </Table>
     );
@@ -111,17 +87,17 @@ class ApiList extends React.PureComponent {
     const { onPre } = this.props;
     return (
       <section className="api-list">
+        {this.renderTableList()}
         <Button.Group className="action" size="large">
           <Button onClick={event => onPre(event)}>
             <Icon type="left" />
 上一步
           </Button>
-          <Button onClick={this.onSubmit}>
+          <Button onClick={this.onSubmit} type="primary">
             下一步
             <Icon type="right" />
           </Button>
         </Button.Group>
-        {this.renderTableList()}
       </section>
     );
   }

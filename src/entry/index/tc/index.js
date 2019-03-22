@@ -13,11 +13,8 @@ export class Manager extends React.PureComponent {
     return rpc({
       url: Rpath('testcase'),
     }).then((res) => {
-      const { data = [], success = false } = res;
-      if (success) {
-        return data;
-      }
-      return Promise.reject(res);
+      const { data = [] } = res;
+      return data;
     });
   }
 

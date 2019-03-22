@@ -21,9 +21,12 @@ class Home extends React.PureComponent {
           title="对应接口"
           key="api"
           sorter={(a, b) => {
-            const [A] = apis.filter(i => i.id === a);
-            const [B] = apis.filter(i => i.id === b);
-            return A.id > B.id;
+            const [A] = apis.filter(i => i.id === a.api);
+            const [B] = apis.filter(i => i.id === b.api);
+            if (A && B) {
+              return A.uri > B.uri;
+            }
+            return 0;
           }}
           render={(text, record) => {
             const { api } = record;
@@ -42,6 +45,8 @@ class Home extends React.PureComponent {
             const Map = {
               testcase: '测试用例',
               func: '执行函数',
+              json: 'JSON数据',
+              mockjs: '随机生成数据',
             };
             return Map[record.mode];
           }}

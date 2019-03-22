@@ -2,14 +2,29 @@
   margin-bottom: 64px;
 }
 
-.testsuite-editor-base {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-
-  .ant-row.ant-form-item {
+.ts-editor {
+  .base {
+    align-items: center;
     display: flex;
-    justify-content: space-around;
-    min-width: 400px;
+    flex-direction: column;
+  
+    .ant-row.ant-form-item {
+      display: flex;
+      justify-content: space-around;
+      min-width: 400px;
+    }
   }
+
+  .rulelist-editor {  
+    .ant-select {
+      min-width: 260px;
+    }
+  
+    footer {
+      display: flex;
+      justify-content: center;
+    }
+  }
+
 }
+
