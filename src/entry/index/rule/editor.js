@@ -13,10 +13,12 @@ import './editor.less';
 class Editor extends React.PureComponent {
   constructor(props, context, updater) {
     super(props, context, updater);
-    const { formData = {} } = props;
+    const { formData = {}, match } = props;
+    const { params } = match;
     const { mode = 'testcase' } = formData;
     this.state = {
       mode,
+      targetApi: params.api || formData.api,
     };
   }
 
@@ -44,8 +46,11 @@ class Editor extends React.PureComponent {
   }
 
   render() {
-    const { form, getInitialValue, history } = this.props;
+    const {
+      form, getInitialValue, history, match,
+    } = this.props;
     const { getFieldDecorator } = form;
+    const { params } = match;
     const { mode = 'testcase' } = this.state;
     return (
       <Form className="rule-editor" onSubmit={this.onSubmit}>
@@ -59,7 +64,7 @@ class Editor extends React.PureComponent {
         >
           {
           getFieldDecorator('api', {
-            initialValue: getInitialValue('api'),
+            initialValue: params.api || getInitialValue('api'),
           })((() => {
             const { apis = [] } = this.props;
             const ds = apis.map(i => ({ value: i.id, text: `${i.uri}\t${i.remark}` }));
@@ -67,6 +72,7 @@ class Editor extends React.PureComponent {
               <AutoComplete
                 dataSource={ds}
                 filterOption={(val, option) => option.props.children.indexOf(val) > -1}
+                onSelect={val => this.setState({ targetApi: val })}
               />
             );
           })())
@@ -128,7 +134,8 @@ class Editor extends React.PureComponent {
               case 'testcase':
               {
                 const { testcases = [] } = this.props;
-                const ds = testcases.map(i => ({ value: i.id, text: `${i.name} | ${i.remark}` }));
+                const { targetApi } = this.state;
+                const ds = testcases.filter(i => i.api === targetApi).map(i => ({ value: i.id, text: `${i.name} | ${i.remark}` }));
                 return (
                   <AutoComplete
                     dataSource={ds}

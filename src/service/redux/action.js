@@ -30,10 +30,11 @@ const ActionMap = {
    * 数据切换规则
    */
   apiDataRules: [],
+
   /**
-   * 当前选中的testsuite
+   * 当前的session信息
    */
-  currentTestSuite: null,
+  sessions: [],
 };
 
 const createAction = type => data => ({

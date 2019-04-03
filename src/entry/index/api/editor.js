@@ -86,7 +86,7 @@ class Editor extends React.PureComponent {
           label="用例类型"
         >
           {getFieldDecorator('type', {
-            initialValue: getInitialValue('type'),
+            initialValue: getInitialValue('type') || 'rpc',
           })(
             <Select onChange={val => this.setState({ type: val })}>
               <Select.Option value="rpc">RPC</Select.Option>

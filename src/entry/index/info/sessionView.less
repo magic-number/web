@@ -1,0 +1,19 @@
+.sessionView {
+  & > header {
+    &>div {
+      display: flex;
+      &+div{
+        margin-top: 16px;
+      }
+      &>div:first-child {
+        min-width: 80px;
+      }
+      &>div:last-child {
+        max-width: calc(100% - 80px);
+      }
+    }
+    .testsuite-picker {
+      width: 100%;
+    }
+  }
+}

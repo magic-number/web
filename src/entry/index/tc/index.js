@@ -10,16 +10,25 @@ import LoadingHOC from '../../../component/LoadingHOC';
 
 export class Manager extends React.PureComponent {
   componentFetchData() {
-    return rpc({
-      url: Rpath('testcase'),
-    }).then((res) => {
-      const { data = [] } = res;
-      return data;
-    });
+    return [
+      rpc({
+        url: Rpath('testcase'),
+      }).then((res) => {
+        const { data = [] } = res;
+        return data;
+      }),
+      rpc({
+        url: Rpath('api'),
+      }).then((res) => {
+        const { data = [] } = res;
+        return data;
+      }),
+    ];
   }
 
-  componentDidFetch(tcs) {
+  componentDidFetch([tcs, apis]) {
     store.dispatch(ActionMap.testcases(tcs));
+    store.dispatch(ActionMap.apis(apis));
   }
 
   render() {
@@ -28,6 +37,7 @@ export class Manager extends React.PureComponent {
       <Switch>
         <Route exact path={`${match.url}`} component={Home} />
         <Route exact path={`${match.url}/creator`} component={Editor} />
+        <Route exact path={`${match.url}/creator/:api`} component={Editor} />
         <Route
           path={`${match.url}/:id`}
           component={({ match: _match }) => {

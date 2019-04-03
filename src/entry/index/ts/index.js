@@ -10,21 +10,29 @@ import LoadingHOC from '../../../component/LoadingHOC';
 
 export class Manager extends React.PureComponent {
   componentFetchData() {
-    return rpc({
-      url: Rpath('testsuites'),
-    }).then((res) => {
-      const { data = [], success = false } = res;
-      if (success) {
+    return [
+      rpc({
+        url: Rpath('testsuites'),
+      }).then((res) => {
+        const { data = [] } = res;
         return data;
-      }
-      return Promise.reject(res);
-    });
+      }),
+      rpc({
+        url: Rpath('api'),
+      }).then((res) => {
+        const { data = [], success = false } = res;
+        if (success) {
+          return data;
+        }
+        return Promise.reject(res);
+      }),
+    ];
   }
 
-  componentDidFetch(ts) {
-    // const [ ts, api ] = ps
+  componentDidFetch(ps) {
+    const [ts, api] = ps;
     store.dispatch(ActionMap.testsuites(ts));
-    // store.dispatch(ActionMap.apis(api))
+    store.dispatch(ActionMap.apis(api));
   }
 
   render() {

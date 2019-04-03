@@ -1,7 +1,39 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { rpc } from 'FETCH';
+import { Rpath } from '../../../common';
+import store, { ActionMap } from '../../../service/redux';
+import LoadingHOC from '../../../component/LoadingHOC';
+import SessionView from './sessionView';
 import './index.less';
 
-const Info = () => <div>test</div>;
+class Info extends React.PureComponent {
+  componentFetchData() {
+    return [rpc({
+      url: Rpath('info'),
+    }).then((res) => {
+      const { data = [] } = res;
+      return data;
+    }),
+    rpc({
+      url: Rpath('testsuites'),
+    }).then((res) => {
+      const { data = [] } = res;
+      return data;
+    }),
+    ];
+  }
+
+  componentDidFetch([sessions, testsuites]) {
+    store.dispatch(ActionMap.sessions(sessions));
+    store.dispatch(ActionMap.testsuites(testsuites));
+  }
+
+  render() {
+    const { sessions = [] } = this.props;
+    return <section>{sessions.map(s => <SessionView key={s.id} data={s} />)}</section>;
+  }
+}
 
 
-export default Info;
+export default connect(({ sessions }) => ({ sessions }))(LoadingHOC(Info));

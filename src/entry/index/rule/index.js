@@ -12,31 +12,13 @@ export class Manager extends React.PureComponent {
     return [
       rpc({
         url: Rpath('apidatarule'),
-      }).then((res) => {
-        const { data = [], success = false } = res;
-        if (success) {
-          return data;
-        }
-        return Promise.reject(res);
-      }),
+      }).then(({ data = [] }) => data),
       rpc({
         url: Rpath('api'),
-      }).then((res) => {
-        const { data = [], success = false } = res;
-        if (success) {
-          return data;
-        }
-        return Promise.reject(res);
-      }),
+      }).then(({ data = [] }) => data),
       rpc({
         url: Rpath('testcase'),
-      }).then((res) => {
-        const { data = [], success = false } = res;
-        if (success) {
-          return data;
-        }
-        return Promise.reject(res);
-      }),
+      }).then(({ data = [] }) => data),
     ];
   }
 
@@ -53,6 +35,7 @@ export class Manager extends React.PureComponent {
       <Switch>
         <Route exact path={`${match.url}`} component={Home} />
         <Route exact path={`${match.url}/creator`} component={Editor} />
+        <Route exact path={`${match.url}/creator/api/:api`} component={Editor} />
         <Route
           path={`${match.url}/:id`}
           component={({ match: _match }) => {

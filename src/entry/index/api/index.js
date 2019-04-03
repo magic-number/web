@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { rpc } from 'FETCH';
 import Home from './home';
 import Editor from './editor';
+import Relation from './relation';
 import { Rpath } from '../../../common';
 import store, { ActionMap } from '../../../service/redux';
 import LoadingHOC from '../../../component/LoadingHOC';
@@ -12,13 +13,7 @@ export class Manager extends React.PureComponent {
   componentFetchData() {
     return rpc({
       url: Rpath('api'),
-    }).then((res) => {
-      const { data = [], success = false } = res;
-      if (success) {
-        return data;
-      }
-      return Promise.reject(res);
-    });
+    }).then(({ data = [] }) => data);
   }
 
   componentDidFetch(apis) {
@@ -31,6 +26,7 @@ export class Manager extends React.PureComponent {
       <Switch>
         <Route exact path={`${match.url}`} component={Home} />
         <Route exact path={`${match.url}/creator`} component={Editor} />
+        <Route exact path={`${match.url}/:id/relation`} component={Relation} />
         <Route
           path={`${match.url}/:id`}
           component={({ match: _match }) => {
@@ -43,6 +39,7 @@ export class Manager extends React.PureComponent {
             return null;
           }}
         />
+
       </Switch>
     );
   }

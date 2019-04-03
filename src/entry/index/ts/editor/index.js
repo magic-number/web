@@ -24,7 +24,7 @@ class Editor extends React.PureComponent {
    * 创建/更新测试场景基本信息
    */
   baseData = (data) => {
-    const { testsuite } = this.state;
+    const { testsuite = {} } = this.state;
     const nts = clone(testsuite);
     rpc({
       url: Rpath('testsuites'),

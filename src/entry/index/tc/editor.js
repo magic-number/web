@@ -1,8 +1,9 @@
 import React from 'react';
 import {
-  Form, Input, Button, message,
+  AutoComplete, Button, Checkbox, Form, Input, message,
 } from 'antd';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { rpc } from 'FETCH';
 import { Rpath } from '../../../common';
 import FormHOC from '../../../component/FormHOC';
@@ -36,7 +37,10 @@ class Editor extends React.PureComponent {
   }
 
   render() {
-    const { form, getInitialValue, history } = this.props;
+    const {
+      form, getInitialValue, history, formData, match,
+    } = this.props;
+    const { params } = match;
     const { getFieldDecorator } = form;
     return (
       <Form className="tc-editor" onSubmit={this.onSubmit}>
@@ -59,6 +63,28 @@ class Editor extends React.PureComponent {
         </Form.Item>
 
         <Form.Item
+          label="关联接口"
+        >
+          {
+          getFieldDecorator('api', {
+            initialValue: params.api || getInitialValue('api'),
+            rules: [{
+              required: true, message: '必须关联一个API',
+            }],
+          })((() => {
+            const { apis = [] } = this.props;
+            const ds = apis.map(i => ({ value: i.id, text: `${i.uri}\t${i.remark}` }));
+            return (
+              <AutoComplete
+                dataSource={ds}
+                filterOption={(val, option) => option.props.children.indexOf(val) > -1}
+              />
+            );
+          })())
+        }
+        </Form.Item>
+
+        <Form.Item
           label="用例备注"
         >
           {getFieldDecorator('remark', {
@@ -77,6 +103,17 @@ class Editor extends React.PureComponent {
             <Input.TextArea rows={8} placeholder="JSON数据" className="json" />,
           )}
         </Form.Item>
+
+        {!formData && (
+        <Form.Item label="自动创建数据规则">
+          {getFieldDecorator('createRule', {
+            initialValue: true,
+            valuePropName: 'checked',
+          })(
+            <Checkbox />,
+          )}
+        </Form.Item>
+        )}
         <footer>
           <Button.Group>
             <Button onClick={() => history.goBack()}>返回</Button>
@@ -88,4 +125,4 @@ class Editor extends React.PureComponent {
   }
 }
 
-export default withRouter(FormHOC(Editor));
+export default withRouter(connect(({ apis }) => ({ apis }))(FormHOC(Editor)));

@@ -8,6 +8,8 @@ const renderFail = () => <div>Loading Fail</div>;
 /**
  * Loading的通用组件
  * 必须作为ReactComponent的直接高阶函数
+ * 子组件必须实现componentFetchData方法，该方法必须返回promise或者promise数组
+ * componetFetchData中的promise将作为参数传递给componentDidFetch
  */
 const LoadingHOC = (WrapperComponent, conf) => {
   class LoadingHOCComponent extends WrapperComponent {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { Link, NavLink, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Table } from 'antd';
 import Summary from '../../../component/summary';
@@ -45,7 +45,13 @@ class Home extends React.PureComponent {
         <Column
           title="操作"
           key="operation"
-          render={(text, record) => <Link className="operation-edit" to={`${match.url}/${record.id}`}>编辑</Link>}
+          render={(text, record) => (
+            <React.Fragment>
+              <Link className="operation operation-edit" to={`${match.url}/${record.id}`}>编辑</Link>
+              <Link className="operation operation-relation" to={`${match.url}/${record.id}/relation`}>数据关系</Link>
+              <NavLink className="operation operation-tc" to={`/tc/creator/${record.id}`}>创建测试用例</NavLink>
+            </React.Fragment>
+          )}
         />
       </Table>
     );
@@ -56,7 +62,7 @@ class Home extends React.PureComponent {
     return (
       <section className="api-home">
         <header>
-          <Link to={`${match.url}/creator`}><Summary title="+" value="创建数据规则" className="primary" /></Link>
+          <Link to={`${match.url}/creator`}><Summary title="+" value="创建接口" className="primary" /></Link>
           <Summary title="接口总数" value={apis.length} />
         </header>
         {this.renderTable(apis)}
