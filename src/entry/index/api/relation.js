@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'antd';
+import { Button, ButtonGroup } from 'antd';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { rpc } from 'FETCH';
@@ -8,7 +8,6 @@ import LoadingHOC from '../../../component/LoadingHOC';
 import store, { ActionMap } from '../../../service/redux';
 import { Rpath } from '../../../common';
 import './relation.less';
-import ButtonGroup from 'antd/lib/button/button-group';
 
 class Relation extends React.PureComponent {
   hasConnection = (tc, rule) => rule.mode === 'testcase' && tc.id === rule.data
@@ -78,5 +77,7 @@ class Relation extends React.PureComponent {
 }
 
 export default withRouter(
-  connect(({ testcases, apiDataRules, apis }) => ({ testcases, apiDataRules, apis }))(LoadingHOC(Relation)),
+  connect(({ testcases, apiDataRules, apis }) => ({
+    testcases, apiDataRules, apis,
+  }))(LoadingHOC(Relation)),
 );

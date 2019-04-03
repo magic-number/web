@@ -42,7 +42,7 @@ class RuleList extends React.PureComponent {
     });
     this.setState({
       dataSource,
-      selections: dataSource.filter(i => i.rule).map(i => i.id),
+      // selections: dataSource.filter(i => i.rule).map(i => i.id),
     });
   }
 

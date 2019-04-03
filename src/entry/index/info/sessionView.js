@@ -147,9 +147,19 @@ class SessionView extends React.PureComponent {
               className="testsuite-picker"
               showSearch
               onChange={this.setTestSuite}
-              filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+              filterOption={
+                (input, option) => option.props.children.toLowerCase()
+                  .indexOf(input.toLowerCase()) >= 0
+              }
             >
-              {testsuites.map(({ id, name }) => <Select.Option key={id} value={name}>{name}</Select.Option>)}
+              {testsuites.map(({ id, name }) => (
+                <Select.Option
+                  key={id}
+                  value={name}
+                >
+                  {name}
+                </Select.Option>
+              ))}
             </Select>
           </div>
           <div>
