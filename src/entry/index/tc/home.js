@@ -13,6 +13,12 @@ class Home extends React.PureComponent {
     return (
       <Table dataSource={rows} rowKey="id">
         <Column
+          title="用例编号"
+          dataIndex="id"
+          key="id"
+          sorter={(a, b) => a.id > b.id}
+        />
+        <Column
           title="用例名称"
           dataIndex="name"
           key="name"

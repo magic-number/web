@@ -29,8 +29,15 @@ class Info extends React.PureComponent {
     store.dispatch(ActionMap.testsuites(testsuites));
   }
 
+  static renderEmpty() {
+    return <section>暂无客户端链接到服务器</section>;
+  }
+
   render() {
     const { sessions = [] } = this.props;
+    if (sessions.length === 0) {
+      return Info.renderEmpty();
+    }
     return <section>{sessions.map(s => <SessionView key={s.id} data={s} />)}</section>;
   }
 }

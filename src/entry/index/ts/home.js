@@ -1,14 +1,18 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Table } from 'antd';
+import { Button, Table } from 'antd';
+import { rpc } from 'FETCH';
+import { Rpath } from '../../../common';
 import Summary from '../../../component/summary';
+import store, { ActionMap } from '../../../service/redux';
+import { clone } from '../../../util';
 import './home.less';
 
 class Home extends React.PureComponent {
   renderTable(rows, apis) {
     const { Column } = Table;
-    const { match } = this.props;
+    const { match, history, testsuites } = this.props;
     return (
       <Table dataSource={rows} rowKey="id">
         <Column
@@ -39,7 +43,31 @@ class Home extends React.PureComponent {
         <Column
           title="操作"
           key="operation"
-          render={(text, record) => <Link className="operation-edit" to={`${match.url}/${record.id}`}>编辑</Link>}
+          render={(text, record) => (
+            <Button.Group>
+              <Button className="operation operation-edit">
+                <Link to={`${match.url}/${record.id}`}>编辑</Link>
+              </Button>
+              <Button
+                className="operation operation-copy"
+                onClick={() => {
+                  const nrecord = clone(record);
+                  nrecord.id = null;
+                  nrecord.name = `复制${nrecord.name}`;
+                  rpc({
+                    url: Rpath('testsuites'),
+                    method: 'POST',
+                    data: nrecord,
+                  }).then(({ data }) => {
+                    store.dispatch(ActionMap.testsuites(testsuites.concat(data)));
+                    history.push(`/ts/${data.id}`);
+                  });
+                }}
+              >
+              复制
+              </Button>
+            </Button.Group>
+          )}
         />
       </Table>
     );
@@ -51,7 +79,7 @@ class Home extends React.PureComponent {
       <section className="ts-home">
         <header>
           <Link to={`${match.url}/creator`}><Summary title="+" value="创建场景" className="primary" /></Link>
-          <Summary title="接口总数" value={testsuites.length} />
+          <Summary title="场景总数" value={testsuites.length} />
         </header>
         {this.renderTable(testsuites, apis)}
       </section>

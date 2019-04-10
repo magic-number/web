@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, ButtonGroup } from 'antd';
+import { Button } from 'antd';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { rpc } from 'FETCH';
@@ -66,11 +66,11 @@ class Relation extends React.PureComponent {
           leftHeader={{ text: '测试用例', fontSize: 20, fontWeight: 'bold' }}
           rightHeader={{ text: '数据切换规则', fontSize: 20, fontWeight: 'bold' }}
         />
-        <ButtonGroup>
+        <Button.Group>
           <Link to="/tc/creator"><Button>创建测试用例</Button></Link>
           <Link to={`/rule/creator/api/${id}`}><Button>创建数据规则</Button></Link>
           <Button onClick={() => history.goBack()}>返回</Button>
-        </ButtonGroup>
+        </Button.Group>
       </section>
     );
   }
