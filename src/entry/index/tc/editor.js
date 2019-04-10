@@ -15,6 +15,7 @@ class Editor extends React.PureComponent {
     const { collectData, history } = this.props;
     collectData(event).then((vals) => {
       try {
+        // eslint-disable-next-line no-param-reassign
         vals.data = JSON.parse(vals.data);
       } catch (e) {
         message.error(`JSON数据有误，请核对！\n${e.message}`);

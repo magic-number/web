@@ -25,6 +25,7 @@ class Editor extends React.PureComponent {
     collectData(event).then((vals) => {
       // rpc不需要method信息
       if (vals.type === 'rpc') {
+        // eslint-disable-next-line no-param-reassign
         vals.method = '';
       }
       rpc({
