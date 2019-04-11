@@ -22,18 +22,20 @@ program
     });
 
     server.listen(port, host);
-
-    const mf = path.join(process.cwd(), 'magic.json');
+    const { magic = process.cwd() } = process.env;
+    const mf = path.join(magic, 'magic.config.json');
     let spawnUrl = null;
     const magicConf = {
       host: '127.0.0.1',
       port: 1211,
     };
     if (fs.existsSync(mf)) {
-      const magic = fs.readFileSync(mf);
+      const json = fs.readFileSync(mf);
       try {
-        const data = JSON.parse(magic);
-        Object.assign(magicConf, data);
+        const data = JSON.parse(json);
+        const { mHost = '127.0.0.1', mPort = 1211 } = data;
+        magicConf.host = mHost;
+        magicConf.port = mPort;
       } catch (e) {
         console.error(e && e.message);
       }
