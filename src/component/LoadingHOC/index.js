@@ -11,7 +11,7 @@ const renderFail = () => <div>Loading Fail</div>;
  * 子组件必须实现componentFetchData方法，该方法必须返回promise或者promise数组
  * componetFetchData中的promise将作为参数传递给componentDidFetch
  */
-const LoadingHOC = (WrapperComponent, conf) => {
+const LoadingHOC = (WrapperComponent, conf = {}) => {
   class LoadingHOCComponent extends WrapperComponent {
     constructor(props, context, updater) {
       super(props, context, updater);
@@ -28,14 +28,31 @@ const LoadingHOC = (WrapperComponent, conf) => {
         const didFetch = super.componentDidFetch && super.componentDidFetch.bind(this);
         return this.fetchData(ps).then((result) => {
           if (didFetch) {
-            return didFetch(result).then(() => this.setState({
-              __loading__: 'done',
-            }, () => {
-              if (this.props.componentDidFetch) {
-                return this.props.componentDidFetch(result);
-              }
-              return Promise.resolve();
-            }));
+            const r = didFetch(result);
+            if (r instanceof Promise) {
+              return r.then(() => this.setState({
+                __loading__: 'done',
+              }, () => {
+                if (this.props.componentDidFetch) {
+                  return this.props.componentDidFetch(result);
+                }
+                return Promise.resolve();
+              }));
+            }
+            return new Promise((resolve) => {
+              this.setState({
+                __loading__: 'done',
+              }, () => {
+                if (this.props.componentDidFetch) {
+                  const rd = this.props.componentDidFetch(result);
+                  if (rd instanceof Promise) {
+                    return rd.then(resolve);
+                  }
+                  return resolve();
+                }
+                return resolve();
+              });
+            });
           }
           if (this.props.componentDidFetch) {
             return this.props.componentDidFetch(result);
