@@ -15,34 +15,53 @@ const LoadingHOC = (WrapperComponent, conf) => {
   class LoadingHOCComponent extends WrapperComponent {
     constructor(props, context, updater) {
       super(props, context, updater);
-      this.state = {
-        status: 'loading',
-      };
+      const state = this.state || {};
+      // eslint-disable-next-line no-underscore-dangle
+      state.__loading__ = 'loading';
+      this.state = state;
+      this.reload();
+    }
+
+    reload = () => {
       try {
         const ps = super.componentFetchData();
-        const didFetch = super.componentDidFetch;
-        this.fetchData(ps).then(didFetch.bind(this));
+        const didFetch = super.componentDidFetch && super.componentDidFetch.bind(this);
+        return this.fetchData(ps).then((result) => {
+          if (didFetch) {
+            return didFetch(result).then(() => this.setState({
+              __loading__: 'done',
+            }, () => {
+              if (this.props.componentDidFetch) {
+                return this.props.componentDidFetch(result);
+              }
+              return Promise.resolve();
+            }));
+          }
+          if (this.props.componentDidFetch) {
+            return this.props.componentDidFetch(result);
+          }
+          return Promise.resolve();
+        });
       } catch (e) {
         console.error(e);
+        return Promise.reject(e);
       }
     }
 
     fetchData = (promises = []) => {
       let promise = null;
-      if (promises instanceof Promise) promise = promises;
-      else if (promises instanceof Array) promise = Promise.all(promises);
-
+      if (promises instanceof Array) promise = Promise.all(promises);
+      else promise = promises;
+      const component = this;
       return Promise.race([promise, new Promise((resolve, reject) => {
         // eslint-disable-next-line no-underscore-dangle
-        const { timeout = 5000 } = LoadingHOCComponent.__conf__;
-        setTimeout(reject, timeout);
-      })]).then(ps => new Promise((r) => {
-        this.setState({
-          status: 'done',
-        }, () => r(ps));
-      }), fail => new Promise((r, j) => {
-        this.setState({
-          status: 'fail',
+        const timeout = conf.timeout || LoadingHOCComponent.__conf__.timeout || 5000;
+        setTimeout(() => {
+          reject(new Error('请求超时'));
+        }, timeout);
+      })]).then(ps => ps, fail => new Promise((r, j) => {
+        component.setState({
+          __loading__: 'fail',
         }, () => j(fail));
       }));
     }
@@ -53,8 +72,8 @@ const LoadingHOC = (WrapperComponent, conf) => {
         renderLoading: loading,
       // eslint-disable-next-line no-underscore-dangle
       } = LoadingHOCComponent.__conf__;
-      const { status } = this.state;
-      switch (status) {
+      const { __loading__ } = this.state;
+      switch (__loading__) {
         case 'fail':
           return fail();
         case 'done':
